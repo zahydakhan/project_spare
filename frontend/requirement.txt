@@ -1,0 +1,4 @@
+npm install redux redux-logger react-redux
+npm install redux-persist
+npm install redux-saga
+npm install reselect

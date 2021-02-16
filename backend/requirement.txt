@@ -1,0 +1,9 @@
+Django Requiremens
+pipenv install django 
+pipenv install djangorestframework
+pipenv install django-import-export
+pipenv install django-cors-headers
+pipenv install django-filter
+pipenv install djangorestframework-simplejwt
+pipenv install djangorestframework-jwt 
+pipenv install Pillow
