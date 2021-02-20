@@ -5,8 +5,8 @@ from .models import SitesPurchaseRequest, MainPurchaseRequest
 
 @admin.register(SitesPurchaseRequest)
 class SitesPRAdmin(admin.ModelAdmin):
-    list_display = ('id','part_number', 'description', 'vendor_name', 'unit_price', 'quantity', 'total_price', 'pr_number', 'line_number', 'site_name',)
+    list_display = ('id','part_number', 'description', 'vendor_name', 'unit_price', 'quantity', 'total_price', 'pr_number', 'line_number', 'site_name', 'month', )
 
 @admin.register(MainPurchaseRequest)
 class MainPRAdmin(admin.ModelAdmin):
-    list_display = ('id','part_number', 'description', 'vendor_name', 'unit_price', 'quantity', 'total_price', 'pr_number', 'line_number', 'site_name', 'month',)
+    list_display = ('id','part_number', 'description', 'vendor_name', 'unit_price', 'quantity', 'total_price', 'pr_number', 'line_number', 'month',)

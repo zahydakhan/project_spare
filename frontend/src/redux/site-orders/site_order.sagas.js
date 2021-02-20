@@ -79,9 +79,9 @@ export function* onDelSiteOrderStart() {
 //Edit ROLLERS Saga
 export function* editSiteOrder(action) {
 	try {
-		console.log('Running Site Order Edit saga');
-		let rowId = action.payload.rollerId;
+		let rowId = action.payload.siteorderId;
 		let values = action.payload.values;
+		console.log('Running Site Order Edit saga', rowId, action);
 		const siteOrderList = yield axios.put(`/pr/sites_pr/${rowId}/`, values);
 		console.log(siteOrderList);
 

@@ -61,27 +61,10 @@ export default function MainOrderPage() {
   const [filterDropData, setFilterDropData] = React.useState([]);
   const [filterSiteData, setFilterSiteData] = React.useState([]);
   const [filterVendorData, setFilterVendorData] = React.useState([]);
-
-  useEffect(() => {
-    dispatch(
-			fetchSitesStart()
-		);
-
-  }, []);
-
-  useEffect(() => {
-    dispatch(
-      fetchMainOrderStart()
-    );
-
-  }, []);
-
-
   /* Selected Iputs */
   const [selectedSite, setSelectedSite] = React.useState([]);
   const [selectedVendor, setSelectedVendor] = React.useState([]);
   const [selectedMonth, setSelectedMonth] = React.useState([]);
-
 
   const handleChangeSite = (event) => {
     setSelectedSite(event.target.value);
@@ -94,30 +77,35 @@ export default function MainOrderPage() {
   const handleChangeMonth = (event) => {
     setSelectedMonth(event.target.value);
   };
+
   
   //Selectors
-  const allSitesList = useSelector((state) => selectSiteList(state));
+  //const allSitesList = useSelector((state) => selectSiteList(state));
   const mainOrderList = useSelector((state) => selectMainOrderList(state));
-  const dropList = useSelector((state) => dropdownList(state));
+  const dropDownList = mainOrderList.map((order) => ({site_name: order.site_name, vendor_name: order.vendor_name, month: order.month}))
+  //const dropList = useSelector((state) => dropdownList(state));
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
   useEffect(() => {
+
+    dispatch(
+      fetchMainOrderStart({site:selectedSite, vendor_name:selectedVendor, month:selectedMonth})
+    );
     
-        const data_site_fill = selectedSite.length ? (dropList.filter((order) => (selectedSite.includes(order.site_name)))) : dropList
-        const data_vendor_fill = selectedVendor.length ? (data_site_fill.filter((order) => (selectedVendor.includes(order.vendor_name)))) : data_site_fill
-        const data_month_fill = selectedMonth.length ? (data_site_fill.filter((order) => (selectedMonth.includes(order.month)))) : data_vendor_fill
-        setFilterSiteData(data_site_fill)
-        setFilterVendorData(data_vendor_fill)
-        setFilterDropData(data_month_fill)
-        console.log('data_site_fill', data_month_fill)
+        // const data_site_fill = selectedSite.length ? (dropList.filter((order) => (selectedSite.includes(order.site_name)))) : dropList
+        // const data_vendor_fill = selectedVendor.length ? (data_site_fill.filter((order) => (selectedVendor.includes(order.vendor_name)))) : data_site_fill
+        // const data_month_fill = selectedMonth.length ? (data_site_fill.filter((order) => (selectedMonth.includes(order.month)))) : data_vendor_fill
+        // setFilterSiteData(data_site_fill)
+        // setFilterVendorData(data_vendor_fill)
+        // setFilterDropData(data_month_fill)
+        // console.log('data_site_fill', data_month_fill)
 
   }, [selectedSite, selectedVendor, selectedMonth]);
 
   console.log('Selected', selectedSite, selectedVendor, selectedMonth);
   //console.log('this is filtered data', filteredData);
-  console.log('this is dropdown list', dropList)
 
   const site_dropdown = [...new Set(dropList.map(item => item.site_name))]
   const vendor_dropdown = [...new Set(filterSiteData.map(item => item.vendor_name))]

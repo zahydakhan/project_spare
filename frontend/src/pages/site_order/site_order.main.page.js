@@ -16,9 +16,10 @@ import { selectSiteOrderList } from '../../redux/site-orders/site_order.selector
 import TextField from '@material-ui/core/TextField';
 import EditIcon from '@material-ui/icons/Edit';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { getCurrentDate } from "../../utils/getCurrentDate";
 import { delSiteOrderStart } from '../../redux/site-orders/site_order.actions';
 import { addMainOrderStart } from '../../redux/main-order/main_order.actions';
+import SiteDeleteModal from './pr_delete_modal/SiteDeleteModal';
+import SiteEditModal from './pr_edit_modal/SiteEditModal';
 
 //Icon import
 import ShoppingIcon from '../../assets/Images/shopping.png';
@@ -69,7 +70,7 @@ const columns = [
 	{
 		id: 'actions',
 		label: 'Actions',
-		minWidth: 110,
+		minWidth: 135,
 	},
 ];
 
@@ -133,7 +134,6 @@ export default function StickyHeadTable() {
     event.preventDefault();
     console.log(row);
     console.log(row.quantity);
-    row.month = getCurrentDate();
     //addSiteOrderStart, delSiteOrderStart
     dispatch(addMainOrderStart({
 		"part_number": row.part_number,
@@ -144,7 +144,7 @@ export default function StickyHeadTable() {
 		"total_price": parseFloat(row.total_price),
 		"pr_number": row.pr_number,
 		"line_number": parseFloat(row.line_number),
-		"site_name": row.site_name,
+		"site_name": row.site_name.id,
 		"month": row.month
 }));
 	dispatch(delSiteOrderStart(row.id));
@@ -212,15 +212,18 @@ export default function StickyHeadTable() {
 												<TableCell>{row.line_number}</TableCell>
 												<TableCell>{row.pr_number}</TableCell>
 												<TableCell>{row.total_price}</TableCell>
-												<TableCell>{row.site_name}</TableCell>
-												<TableCell>{getCurrentDate()}</TableCell>
+												<TableCell>{row.site_name.site}</TableCell>
+												<TableCell>{row.month}</TableCell>
 												<TableCell>
                           <Grid container spacing={2}>
                             <Grid item>
                             <AddCircleIcon className={classes.icon} onClick={handleSubmit(row)} />
                             </Grid>
                             <Grid item>
-                            <EditIcon className={classes.icon} onClick={handleSubmit(row)} />
+                            <SiteEditModal row={row} />
+                            </Grid>
+							<Grid item>
+                            <SiteDeleteModal  row={row} />
                             </Grid>
                           </Grid>
                         

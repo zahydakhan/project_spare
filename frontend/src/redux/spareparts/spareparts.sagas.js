@@ -43,6 +43,7 @@ export function* addSparepart(action) {
         yield put(fetchSparepartStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
     } catch (error) {
         yield put(addSparepartFailure(error.message));
+        console.log(error.message);
     }
 }
 

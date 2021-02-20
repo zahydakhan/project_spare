@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
 import BasicTable from "./cart.table";
+import { getCurrentDate } from "../../utils/getCurrentDate";
 //Cart Imports
 import { useDispatch, useSelector } from "react-redux";
 import { selectCartItems } from "../../redux/cart/cart.selector";
@@ -76,11 +77,15 @@ const CheckoutPage = () => {
                 pr_number: pr_num,
                 line_number: index + 1,
                 site_name: inputSite,
+                month: getCurrentDate(),
               }))
             setSubmitSuccess('Submitted successfully');
             dispatch(delCartItems(crt));
         })
 
+
+
+        
     }
     else{
         setSubmitError('Please select site');
@@ -98,7 +103,7 @@ const CheckoutPage = () => {
   const handleChange = (event) => {
     const sitee = event.target.value;
     setInputSite(event.target.value);
-    setFilteredQuary(sites.filter((site) => site.site == sitee));
+    setFilteredQuary(sites.filter((site) => site.id == sitee));
     setSubmitError('');
   };
 
@@ -131,7 +136,7 @@ const CheckoutPage = () => {
                   onChange={handleChange}
                 >
                   {sites.map((site) => (
-                    <MenuItem key={site.id} value={site.site}>
+                    <MenuItem key={site.id} value={site.id}>
                       {site.site}
                     </MenuItem>
                   ))}

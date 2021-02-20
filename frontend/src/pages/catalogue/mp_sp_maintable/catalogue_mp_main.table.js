@@ -169,10 +169,11 @@ export default function StickyHeadTable() {
 	const handleSubmit = (row) => (event) => {
 		event.preventDefault();
 		console.log('values for submit', row, rowQuantity);
-		console.log(rowQuantity.quantity.indexOf('.'));
+		
 		if (
 			parseInt(rowQuantity.quantity) === 0 ||
-			rowQuantity.quantity.indexOf('.') !== -1
+			rowQuantity.quantity.indexOf('.') !== -1 ||
+			rowQuantity.quantity.length == 0
 		  ) {
 			setSubmitError("Invalid quantity");
 			return "error";

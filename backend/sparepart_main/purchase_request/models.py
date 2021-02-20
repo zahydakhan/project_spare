@@ -14,7 +14,8 @@ class SitesPurchaseRequest(models.Model):
     total_price = models.DecimalField(max_digits=20, decimal_places=2,null=True, blank=True)
     pr_number = models.CharField(max_length=20, null=True, blank=True)
     line_number = models.IntegerField( null=True, blank=True)
-    site_name = models.CharField(max_length=20, null=True, blank=True)
+    site_name = models.ForeignKey(Site, on_delete=models.PROTECT, related_name='siteorder_rev',null=True, blank=True,)
+    month = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
      
 
@@ -31,7 +32,7 @@ class MainPurchaseRequest(models.Model):
     total_price = models.DecimalField(max_digits=20, decimal_places=2,null=True, blank=True)
     pr_number = models.CharField(max_length=20, null=True, blank=True)
     line_number = models.IntegerField( null=True, blank=True)
-    site_name = models.CharField(max_length=20, null=True, blank=True)
+    site_name = models.ForeignKey(Site, on_delete=models.PROTECT, related_name='mainorder_rev', null=True, blank=True)
     month = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
 

@@ -19,12 +19,15 @@ import {
 } from './main_order.actions';
 
 //Fetch Site Order Saga
-export function* fetchMainOrder() {
+export function* fetchMainOrder(action) {
+    let vendor_name = action.payload.vendor_name
+    let site = action.payload.site
+    let month = action.payload.month
     console.log('running Site Order Fetch Start saga');
     
     try {
         const mainOrdersList = yield axios.get(
-            `/pr/main_pr/`);
+            `/pr/mainorderfilter/?vendor_name={$vendor_name}&site={$site}&month={$month}`);
         console.log(mainOrdersList);
         yield put(fetchMainOrderSuccess(mainOrdersList.data));
     } catch (error) {

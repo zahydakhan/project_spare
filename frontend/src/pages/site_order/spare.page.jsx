@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -10,28 +11,69 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-
-import { fetchMonthlyOrderStart, fetchMainOrderStart } from '../../redux/main-order/main_order.actions';
-import { selectMonthlyOrderList } from '../../redux/main-order/main_order.selector';
-
-
-import { useDispatch, useSelector } from 'react-redux';
+import { fetchSparepartStart } from '../../redux/spareparts/spareparts.actions';
+import { selectSparepartList } from '../../redux/spareparts/spareparts.selector';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import TextField from '@material-ui/core/TextField';
+
 //Icon import
 import BusinessIcon from '@material-ui/icons/Business';
 
+//Modal Import
+import SpareAddModal from './spare_add_modal/SpareAddModal';
+import SpareDeleteModal from './spare_delete_modal/SpareDeleteModal';
+import SpareEditModal from './spare_edit_modal/SpareEditModal';
+
 const columns = [
-	{ id: 'vendor_name', label: 'Vendor Name', minWidth: 100 },
-	{ id: 'part_number', label: 'Part Number', minWidth: 70 },
+	{ id: 'part_number', label: 'Part Number', minWidth: 100 },
 	{ id: 'description', label: 'Description', minWidth: 100 },
-	{ id: 'site_name', label: 'Site Name', minWidth: 100 },
-	{ id: 'quantity', label: 'Quantity', minWidth: 100 },
-	{ id: 'unit_price', label: 'Unit Price', minWidth: 100 },
-	{ id: 'total_price', label: 'Total Price', minWidth: 100 },
-	{ id: 'pr_number', label: 'PR Number', minWidth: 100 },
-	{ id: '​​​line_number', label: '​​​Line Number', minWidth: 100 },
-    { id: 'month', label: 'Month', minWidth: 100 },
+	{
+		id: 'vendor_name',
+		label: 'Vendor Name',
+		minWidth: 100,
+	},
+	{
+		id: 'vendor_status',
+		label: 'Vendor Status',
+		minWidth: 100,
+	},
+	{
+		id: 'sp_type',
+		label: 'Sparepart Type',
+		minWidth: 100,
+	},
+	{
+		id: 'weight_kg',
+		label: 'Weight (kg)',
+		minWidth: 100,
+	},
+	{
+		id: 'machine',
+		label: 'Machine',
+		minWidth: 100,
+	},
+	{
+		id: 'model_number',
+		label: 'Model Number',
+		minWidth: 100,
+	},
+	{
+		id: 'aud',
+		label: 'AUD',
+		minWidth: 100,
+	},
+	{
+		id: 'usd',
+		label: 'USD',
+		minWidth: 100,
+	},
+	{
+		id: 'actions',
+		label: 'Actions',
+		minWidth: 130,
+	},
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -50,19 +92,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function StickyHeadTable() {
 	const classes = useStyles();
+	const dispatch = useDispatch();
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
-	const dispatch = useDispatch();
 	const [search, setSearch] = React.useState('');
-
-	const handleBlur = (event) => {
-		console.log(event.target.value);
-		setSearch(event.target.value);
-	};
 
 	useEffect(() => {
 		dispatch(
-			fetchMonthlyOrderStart({
+			fetchSparepartStart({
 				pageNo: page,
 				rowsPerPage: rowsPerPage,
 				searchstr: search,
@@ -70,10 +107,9 @@ export default function StickyHeadTable() {
 		);
 	}, [page, rowsPerPage, search]);
 
-    const monthlyOrderData = useSelector((state) => selectMonthlyOrderList(state));
-	console.log('this is the data i am getting', monthlyOrderData);
+	const spareData = useSelector((state) => selectSparepartList(state));
 
-
+	console.log('Here is the sparepart data', spareData);
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
 	};
@@ -81,6 +117,11 @@ export default function StickyHeadTable() {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(+event.target.value);
 		setPage(0);
+	};
+
+	const handleBlur = (event) => {
+		console.log(event.target.value);
+		setSearch(event.target.value);
 	};
 
 	return (
@@ -92,7 +133,7 @@ export default function StickyHeadTable() {
 				<Grid item>
 					<Typography variant='h2' style={{ marginLeft: '0.5em' }}>
 						{' '}
-						Monthly Orders List
+						Spare Part List
 					</Typography>
 				</Grid>
 			</Grid>
@@ -105,11 +146,14 @@ export default function StickyHeadTable() {
 				<Grid item>
 					<TextField
 						id='outlined-search'
-						label='Search Roller Sparepart'
+						label='Search Sparepart'
 						type='search'
 						variant='outlined'
 						onBlur={handleBlur}
 					/>
+				</Grid>
+				<Grid item>
+					<SpareAddModal />
 				</Grid>
 			</Grid>
 			<Paper className={classes.root}>
@@ -125,7 +169,7 @@ export default function StickyHeadTable() {
 									<TableCell
 										key={column.id}
 										align={column.align}
-										style={{ minWidth: column.minWidth, color: '#ffff' }}
+										style={{ minWidth: column.minWidth, color: '#fff' }}
 									>
 										{column.label}
 									</TableCell>
@@ -133,20 +177,30 @@ export default function StickyHeadTable() {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{monthlyOrderData.results
-								? monthlyOrderData.results.map((row) => {
+							{spareData.results
+								? spareData.results.map((row) => {
 										return (
 											<TableRow hover key={row.id}>
-												<TableCell>{row.vendor_name}</TableCell>
 												<TableCell>{row.part_number}</TableCell>
 												<TableCell>{row.description}</TableCell>
-												<TableCell>{row.site_name.site}</TableCell>
-												<TableCell>{row.quantity}</TableCell>
-												<TableCell>{row.unit_price}</TableCell>
-												<TableCell>{row.total_price}</TableCell>
-												<TableCell>{row.pr_number}</TableCell>
-												<TableCell>{row.line_number}</TableCell> 
-                                                <TableCell>{row.month}</TableCell>
+												<TableCell>{row.vendor_name}</TableCell>
+												<TableCell>{row.vendor_status}</TableCell>
+												<TableCell>{row.sp_type}</TableCell>
+												<TableCell>{row.weight_kg}</TableCell>
+												<TableCell>{row.machine}</TableCell>
+												<TableCell>{row.model_number}</TableCell>
+												<TableCell>{row.aud}</TableCell>
+												<TableCell>{row.aud}</TableCell>
+												<TableCell>
+													<Grid container>
+														<Grid item>
+															<SpareEditModal row={row} />
+														</Grid>
+														<Grid item>
+															<SpareDeleteModal row={row} />
+														</Grid>
+													</Grid>
+												</TableCell>
 											</TableRow>
 										);
 								  })
@@ -157,7 +211,7 @@ export default function StickyHeadTable() {
 				<TablePagination
 					rowsPerPageOptions={[10, 25, 100]}
 					component='div'
-					count={monthlyOrderData.count}
+					count={spareData.count}
 					rowsPerPage={rowsPerPage}
 					page={page}
 					onChangePage={handleChangePage}

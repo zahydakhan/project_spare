@@ -11,6 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter,SearchFilter
 from django_filters import FilterSet
 from django_filters import rest_framework as filters
+from sites.models import Site
 
 class CustomPagination(PageNumberPagination):
     page_size = 10
@@ -37,11 +38,15 @@ class SitesPRViewSet(viewsets.ViewSet):
         return Response(response_dict)
 
     def create(self, request):
+        request_data = request.data
+        
         try:
-            serializer = SitePRSerializer(
-                data=request.data, context={"request": request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            site_order = SitesPurchaseRequest.objects.create(site_name=Site.objects.get(id=request_data["site_name"]), part_number = request_data['part_number'],
+         description = request_data['description'], vendor_name = request_data['vendor_name'], unit_price = request_data['unit_price'], quantity = request_data['quantity'], total_price = request_data['total_price'],
+          pr_number = request_data['pr_number'], line_number = request_data['line_number'], month = request_data['month'])
+
+            site_order.save()
+            serializer = SitePRSerializer(site_order)
             dict_response = {"error": False,
                              "message": "Purchase request saved successfully"}
         except:
@@ -89,6 +94,36 @@ class MainOrdersListView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     search_fields=('site_name','description','part_number','vendor_name', )
 
+class MainPRFilter(FilterSet):
+    
+    vendor_name=filters.CharFilter(method='filter_by_vendor_name')
+    site=filters.CharFilter(method='filter_by_site')
+    month=filters.CharFilter(method='filter_by_month')
+
+    class Meta:
+        model = MainPurchaseRequest
+        fields=['vendor_name','month', 'site',]
+    
+    def filter_by_vendor_name(self,queryset,name,value):
+        vendorName=value.strip().split(',')
+        return queryset.filter(vendor_name__in=vendorName).distinct()
+
+    def filter_by_month(self,queryset,name,value):
+        monthName=value.strip().split(',')
+        return queryset.filter(month__in=monthName).distinct()
+
+    def filter_by_site(self,queryset,name,value):
+        siteName=value.strip().split(',')
+        return queryset.filter(site_name__site__in=siteName).distinct()
+
+class MainOrdersFilterListView(generics.ListAPIView):
+    queryset=MainPurchaseRequest.objects.all()
+    serializer_class=MainPRSerializer
+    pagination_class=None
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    filter_class=MainPRFilter
+    #filter_fields = ('vendor_name','month', 'site_name__site',)
+
 class MainPRViewSet(viewsets.ViewSet):
     #authentication_classes = [JWTAuthentication]
     #permission_classes = [IsAuthenticated]
@@ -102,11 +137,14 @@ class MainPRViewSet(viewsets.ViewSet):
         return Response(response_dict)
 
     def create(self, request):
+        request_data = request.data
         try:
-            serializer = MainPRSerializer(
-                data=request.data, context={"request": request})
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            main_order = MainPurchaseRequest.objects.create(site_name=Site.objects.get(id=request_data["site_name"]), part_number = request_data['part_number'],
+         description = request_data['description'], vendor_name = request_data['vendor_name'], unit_price = request_data['unit_price'], quantity = request_data['quantity'], total_price = request_data['total_price'],
+          pr_number = request_data['pr_number'], line_number = request_data['line_number'], month = request_data['month'])
+
+            main_order.save()
+            serializer = MainPRSerializer(main_order)
             dict_response = {
                 "error": False, "message": "Main purchase request saved successfully"}
         except:
