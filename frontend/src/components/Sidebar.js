@@ -22,6 +22,8 @@ import {
   Typography,
 } from "@material-ui/core";
 
+import {createImageFromInitials, getRandomColor} from '../utils/createImage';
+
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 
 import { green } from "@material-ui/core/colors";
@@ -315,6 +317,11 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
       Object.assign({}, openRoutes, { [index]: !openRoutes[index] })
     );
   };
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  console.log('this is the current user', currentUser);
+
+  const profileImage = currentUser.first_name.charAt(0)
+  console.log('character', profileImage)
 
   return (
     <Drawer variant="permanent" {...rest}>
@@ -390,15 +397,15 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
               variant="dot"
             >
               <Avatar
-                alt="Lucy Lavender"
-                src="/static/img/avatars/avatar-1.jpg"
+                alt="{currentUser.first_name}"
+                src={createImageFromInitials(500, currentUser.first_name, getRandomColor()) }
               />
             </SidebarFooterBadge>
           </Grid>
           <Grid item>
-            <SidebarFooterText variant="body2">Lucy Lavender</SidebarFooterText>
+            <SidebarFooterText variant="body2">{currentUser.first_name}</SidebarFooterText>
             <SidebarFooterSubText variant="caption">
-              UX Designer
+            {currentUser.role}
             </SidebarFooterSubText>
           </Grid>
         </Grid>

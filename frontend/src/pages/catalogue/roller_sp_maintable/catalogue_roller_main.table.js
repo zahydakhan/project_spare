@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { fetchRollerStart } from '../../../redux/roller/roller.actions';
 import { selectRollerList } from '../../../redux/roller/roller.selector';
-import SettingsIcon from '../../../assets/Images/settings2.png';
+import SettingsIconPNG from '../../../assets/Images/settings2.png';
 
 import Box from '@material-ui/core/Box';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
@@ -33,6 +33,15 @@ import { spacing } from "@material-ui/system";
 import styled from "styled-components";
 //imports for cart
 import {addCartItems} from '../../../redux/cart/cart.actions';
+import BuildIcon from '@material-ui/icons/Build';
+import LanguageIcon from '@material-ui/icons/Language';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import {
+	Avatar as MuiAvatar,
+	SvgIcon,
+  } from "@material-ui/core";
+  
 
 const columns = [
 	{
@@ -70,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
 		fontWeight: 'bolder',
 	},
 	subtitle: {
+		fontSize: 16,
 		color: '#fff',
 		fontWeight: 'bolder',
 	},
@@ -80,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
 	subtitleRed: {
 		color: '#e63946',
 		fontWeight: 'bolder',
+		fontSize: 18,
 	},
 	price: {
 		color: '#000',
@@ -91,11 +102,6 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '0.5em',
 	},
 	box: {
-		backgroundColor: theme.palette.primary.main,
-		color: '#fff',
-		padding: '0.6em 0.8em',
-	},
-	box1: {
 		backgroundColor: '#4caf50',
 		color: '#fff',
 		padding: '0.6em 0.8em',
@@ -213,11 +219,15 @@ export default function StickyHeadTable() {
 		style: { width: 'auto', height: 'auto' },
 	};
 
+	const Avatar = styled(MuiAvatar)`
+  background: ${(props) => props.theme.palette.primary.main};
+`;
+
 	return (
 		<React.Fragment>
 			<Grid container align='center' style={{ marginBottom: '1em' }}>
 				<Grid item>
-					<img src={SettingsIcon} alt="roller-logo" style={{width: "3em",}} />
+					<img src={SettingsIconPNG} alt="roller-logo" style={{width: "3em",}} />
 				</Grid>
 				<Grid item>
 					<Typography variant='h2' style={{ marginLeft: '0.5em' }}>
@@ -292,20 +302,25 @@ export default function StickyHeadTable() {
 																		style={{ flexWrap: 'nowrap' }}
 																	>
 																		<Grid item>
-																			<PermContactCalendarIcon
+																			<SettingsIcon
 																				fontSize='large'
 																				style={{ marginRight: '0.3em' }}
 																			/>
 																		</Grid>
 																		<Grid item>
 																			<span className={classes.subtitle}>
-																				Part Number:
-																			</span>{' '}
-																			{row.bearing} <br />
+																				Description:
+																			</span>
+																			<span style={{fontSize: 16, marginLeft: '0.3em', }}>
+																				{row.description}
+																			</span>
+																			 <br />
 																			<span className={classes.subtitle}>
 																				Vendor Name:{' '}
 																			</span>
-																			{row.vendor_name} <br />
+																			<span style={{fontSize: 16}}>
+																			{row.vendor_name} 
+																			</span><br />
 																		</Grid>
 																	</Grid>
 																</Box>
@@ -314,19 +329,22 @@ export default function StickyHeadTable() {
 																<Grid
 																	container
 																	direction='row'
+																	spacing={2}
 																	justify='center'
 																>
 																	<Grid item>
-																		<MonetizationOnIcon />
+																		<MonetizationOnIcon fontSize='large' />
 																	</Grid>
-																	<Grid item>
+																	<Grid item alignItems='center'>
 																		<span className={classes.subtitleRed}>
 																			(AUD): {row.aud ? row.aud : (
                               													parseFloat(row.usd) * parseFloat(audToUsd)
                             												).toFixed(2)}
 																		</span>{' '}
+																	
 																	</Grid>
 																</Grid>
+
 															</Grid>
 														</Grid>
 														<Grid container spacing={1}>
@@ -338,16 +356,22 @@ export default function StickyHeadTable() {
 																	}}
 																>
 																	<ListItemIcon>
-																		<AssignmentIcon fontSize='large' />
+																	<ListItemAvatar>
+																		<Avatar>
+																		<SvgIcon style={{ fontSize: 25 }}>
+																		<AssignmentIcon />
+																		</SvgIcon>
+																		</Avatar>
+																	</ListItemAvatar>
 																	</ListItemIcon>
 																	<ListItemText
-																		primary='Description'
+																		primary='Bearing'
 																		secondary={
 																			<Typography
 																				component='span'
 																				color='textSecondary'
 																			>
-																				{row.description}
+																				{row.bearing}
 																			</Typography>
 																		}
 																	/>
@@ -355,9 +379,21 @@ export default function StickyHeadTable() {
 															</Grid>
 															<Grid item sm={6}>
 																<ListItem style={{ border: '2px solid #eee' }}>
+																<ListItemIcon>
+																<ListItemAvatar>
+																		<Avatar>
+																		<SvgIcon style={{ fontSize: 25 }}>
+																		<BuildIcon />
+																		</SvgIcon>
+																		</Avatar>
+																	</ListItemAvatar>
+
+																	</ListItemIcon>
 																	<ListItemText>
 																		<Typography component='span'>
-																			<span className={classes.subtitleBlack}>
+																			<Grid container spacing={4}>
+																				<Grid item>
+																				<span className={classes.subtitleBlack}>
 																				Roller Diameter:{' '}
 																			</span>
 																			{row.roller_diameter}
@@ -366,8 +402,11 @@ export default function StickyHeadTable() {
 																				Roller Length:{' '}
 																			</span>
 																			{row.roller_length}
-																			<br />
-																			<span className={classes.subtitleBlack}>
+																		
+																			
+																				</Grid>
+																				<Grid item>
+																				<span className={classes.subtitleBlack}>
 																				Shaft Diameter:{' '}
 																			</span>
 																			{row.shaft_diameter} <br />
@@ -375,10 +414,14 @@ export default function StickyHeadTable() {
 																				Wall Thickness:{' '}
 																			</span>
 																			{row.wall_thickness}
+																				</Grid>
+																			</Grid>
 																		</Typography>
 																	</ListItemText>
 																</ListItem>
 															</Grid>
+															
+														
 														</Grid>
 													</CardContent>
 												</Card>

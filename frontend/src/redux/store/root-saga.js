@@ -48,6 +48,7 @@ import {
 	onDelMainOrderStart,
 	onEditMainOrderStart,
 	onFetchMonthlyOrderStart,
+	onFetchCompleteOrderStart,
 } from '../main-order/main_order.sagas';
 
 import { onFetchUserStart } from '../user/user.sagas';
@@ -90,5 +91,6 @@ export default function* rootSaga() {
 		call(onEditMainOrderStart),
 		call(onFetchMonthlyOrderStart),
 		call(onFetchUserStart),
+		call(onFetchCompleteOrderStart),
 	]);
 }

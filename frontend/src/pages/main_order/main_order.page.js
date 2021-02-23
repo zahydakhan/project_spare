@@ -11,11 +11,9 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { fetchMainOrderStart } from '../../redux/main-order/main_order.actions';
-import { selectMainOrderList, dropdownList } from '../../redux/main-order/main_order.selector';
+import { fetchMainOrderStart, fetchFullMainOrderStart } from '../../redux/main-order/main_order.actions';
+import { selectMainOrderList, selectCompleteOrderList } from '../../redux/main-order/main_order.selector';
 import MainOrderComponent from './main_order.component';
-import { selectSiteList } from '../../redux/sites/sites.selector';
-import { fetchSitesStart } from '../../redux/sites/sites.actions';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -66,8 +64,27 @@ export default function MainOrderPage() {
   const [selectedVendor, setSelectedVendor] = React.useState([]);
   const [selectedMonth, setSelectedMonth] = React.useState([]);
 
-  const handleChangeSite = (event) => {
-    setSelectedSite(event.target.value);
+  useEffect(() => {
+    console.log("Running useeffect fetch main order start", selectedSite);
+
+    dispatch(
+      fetchFullMainOrderStart()
+    );
+    
+    // dispatch(
+    //   fetchSitesStart()
+    // );
+
+  }, []);
+
+  // dispatch(
+  //   fetchMainOrderStart({site:selectedSite, vendor_name:selectedVendor, month:selectedMonth})
+  // );
+
+
+  const handleChangeSite = async (event) => {
+    await setSelectedSite(event.target.value);
+    console.log("selectedSite in handleChange", selectedSite)
   };
 
   const handleChangeVendor = (event) => {
@@ -78,38 +95,44 @@ export default function MainOrderPage() {
     setSelectedMonth(event.target.value);
   };
 
+  const handleGenerate = (event) => {
+    event.preventDefault();
+    console.log("Running generate function")
+     dispatch(
+     fetchMainOrderStart({site:selectedSite, vendor_name:selectedVendor, month:selectedMonth})
+   );
+  }
+
+  
+
   
   //Selectors
-  //const allSitesList = useSelector((state) => selectSiteList(state));
   const mainOrderList = useSelector((state) => selectMainOrderList(state));
-  const dropDownList = mainOrderList.map((order) => ({site_name: order.site_name, vendor_name: order.vendor_name, month: order.month}))
+  const completeOrderList = useSelector((state) => selectCompleteOrderList(state));
+
+  console.log("completeOrderList", completeOrderList)
+  
+  const dropListSite = [...new Set(completeOrderList.map(order => order.site_name.site))];
+  console.log("dropListSite", dropListSite)
+
+  const dropListVendor = [...new Set(completeOrderList.map(order => order.vendor_name))];
+  const dropListMonth = [...new Set(completeOrderList.map(order => order.month))];
+  
+
   //const dropList = useSelector((state) => dropdownList(state));
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-  useEffect(() => {
+ 
 
-    dispatch(
-      fetchMainOrderStart({site:selectedSite, vendor_name:selectedVendor, month:selectedMonth})
-    );
-    
-        // const data_site_fill = selectedSite.length ? (dropList.filter((order) => (selectedSite.includes(order.site_name)))) : dropList
-        // const data_vendor_fill = selectedVendor.length ? (data_site_fill.filter((order) => (selectedVendor.includes(order.vendor_name)))) : data_site_fill
-        // const data_month_fill = selectedMonth.length ? (data_site_fill.filter((order) => (selectedMonth.includes(order.month)))) : data_vendor_fill
-        // setFilterSiteData(data_site_fill)
-        // setFilterVendorData(data_vendor_fill)
-        // setFilterDropData(data_month_fill)
-        // console.log('data_site_fill', data_month_fill)
-
-  }, [selectedSite, selectedVendor, selectedMonth]);
-
+  
   console.log('Selected', selectedSite, selectedVendor, selectedMonth);
   //console.log('this is filtered data', filteredData);
 
-  const site_dropdown = [...new Set(dropList.map(item => item.site_name))]
-  const vendor_dropdown = [...new Set(filterSiteData.map(item => item.vendor_name))]
-  const month_dropdown = [...new Set(filterVendorData.map(item => item.month))]
+  // const site_dropdown = [...new Set(dropList.map(item => item.site_name))]
+  // const vendor_dropdown = [...new Set(filterSiteData.map(item => item.vendor_name))]
+  // const month_dropdown = [...new Set(filterVendorData.map(item => item.month))]
   console.log('main order list', mainOrderList)
 
   return (
@@ -143,7 +166,7 @@ export default function MainOrderPage() {
               renderValue={(selected) => selected.join(", ")}
               MenuProps={MenuProps}
             >
-              {site_dropdown.map((name1) => (
+              {dropListSite.map((name1) => (
                 <MenuItem key={name1} value={name1}>
                   <Checkbox checked={selectedSite.indexOf(name1) > -1} />
                   <ListItemText primary={name1} />
@@ -167,7 +190,7 @@ export default function MainOrderPage() {
               renderValue={(selected) => selected.join(", ")}
               MenuProps={MenuProps}
             >
-              {vendor_dropdown.map((name) => (
+              {dropListVendor.map((name) => (
                 <MenuItem key={name} value={name}>
                   <Checkbox checked={selectedVendor.indexOf(name) > -1} />
                   <ListItemText primary={name} />
@@ -189,7 +212,7 @@ export default function MainOrderPage() {
               renderValue={(selected) => selected.join(", ")}
               MenuProps={MenuProps}
             >
-              {month_dropdown.map((name) => (
+              {dropListMonth.map((name) => (
                 <MenuItem key={name} value={name}>
                   <Checkbox checked={selectedMonth.indexOf(name) > -1} />
                   <ListItemText primary={name} />
@@ -198,8 +221,13 @@ export default function MainOrderPage() {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item>
+          <Button onClick={handleGenerate} variant="contained" color="primary" >Generate</Button>
+        </Grid>
       </Grid>
-      <MainOrderComponent sitesList={allSitesList} mainOrderList={mainOrderList} ref={componentRef} selectedSite={selectedSite} selectedVendor={selectedVendor} selectedMonth={selectedMonth} />  
+      {mainOrderList && 
+       <MainOrderComponent mainOrderList={mainOrderList} ref={componentRef} selectedSite={selectedSite} /> 
+      }
     </React.Fragment>
   );
 }

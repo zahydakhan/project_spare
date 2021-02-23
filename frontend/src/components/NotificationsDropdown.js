@@ -92,7 +92,7 @@ function NotificationsDropdown() {
 
   return (
     <React.Fragment>
-      <Tooltip title="Notifications">
+      <Tooltip title="Cart">
         <IconButton color="inherit" ref={ref} onClick={handleOpen}>
           <Indicator badgeContent={cartCount}>
             <ShoppingCartIcon />

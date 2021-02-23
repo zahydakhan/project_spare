@@ -13,7 +13,8 @@ const localspareReducer = (state = INITIAL_STATE, action) => {
         case Localspare_types.FETCH_LOCALSPARE_START:
             return {
                 ...state,
-                isLocalspareFetching: true
+                isLocalspareFetching: true,
+                errorLocalspareMessage: undefined
             };
         case Localspare_types.FETCH_LOCALSPARE_SUCCESS:
             return {

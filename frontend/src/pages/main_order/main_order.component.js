@@ -22,26 +22,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainOrderComponent = React.forwardRef((props, ref) => {
-  const { selectedSite, selectedVendor, selectedMonth, mainOrderList, sitesList } = props;
+  const { selectedSite, mainOrderList, } = props;
+
+  const siteList = [...new Set(mainOrderList.map(order => order.site_name.site))]
   
   const classes = useStyles();
-  const [finalData, setFinalData] = React.useState([]);
-
-  useEffect(() => {
-        const result = mainOrderList.data.filter((item) => {
-          const { site_name, vendor_name, month } = item;
-
-          return (
-            selectedSite.includes(site_name) &&
-            selectedVendor.includes(vendor_name) &&
-            selectedMonth.includes(month)
-          );
-        });
-
-        console.log(result);
-        setFinalData(result);
-
-  }, [selectedSite, selectedVendor, selectedMonth]);
 
   console.log("selected site data in main component", selectedSite)
 
@@ -58,13 +43,16 @@ const MainOrderComponent = React.forwardRef((props, ref) => {
         </Grid>
       </Grid>
 
-      {selectedSite.map((site) => {
-        let site_data = sitesList.filter(st => (st.site == site))
-        let order_data = finalData.filter(order => (order.site_name == site))
-        //console.log("site_data ", site_data)
-        //console.log("order_data ", order_data)
+      
+
+      {siteList && siteList.map((site) => {
+        
+        let order_data = mainOrderList.filter(order => (order.site_name.site == site))
+        let site_data = order_data[0] && order_data[0].site_name
+        
+        console.log("site_data ", order_data)
         return(
-          <OrderTable site_data={site_data} order_data={order_data} />
+          <OrderTable order_data={order_data} site_data={site_data} />
         )
       })}
     </div>

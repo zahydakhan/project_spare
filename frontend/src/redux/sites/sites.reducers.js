@@ -13,13 +13,14 @@ const siteReducer = (state = INITIAL_STATE, action) => {
         case Sites_types.FETCH_SITE_START:
             return {
                 ...state,
-                isSiteFetching: true
+                isSiteFetching: true,
+                errorSiteMessage: ''
             };
         case Sites_types.FETCH_SITE_SUCCESS:
             return {
                 ...state,
                 isSiteFetching: false,
-                siteList: action.payload
+                siteList: action.payload,
             };
         case Sites_types.FETCH_SITE_FAILURE:
             return {

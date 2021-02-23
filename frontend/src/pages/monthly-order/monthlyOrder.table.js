@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 //Icon import
 import BusinessIcon from '@material-ui/icons/Business';
+import CalenderIcon from '../../assets/Images/annual.png';
 
 const columns = [
 	{ id: 'vendor_name', label: 'Vendor Name', minWidth: 100 },
@@ -87,7 +88,7 @@ export default function StickyHeadTable() {
 		<React.Fragment>
 			<Grid container align='center' style={{ marginBottom: '1em' }}>
 				<Grid item>
-					<BusinessIcon fontSize='large' />
+					<img src={CalenderIcon} alt="roller-logo" style={{width: "3em",}} />
 				</Grid>
 				<Grid item>
 					<Typography variant='h2' style={{ marginLeft: '0.5em' }}>

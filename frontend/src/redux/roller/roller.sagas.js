@@ -45,7 +45,7 @@ export function* addRoller(action) {
 		//yield put(addRollerSuccess(sitesList.data));
 		yield put(fetchRollerStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
 	} catch (error) {
-		yield put(addRollerFailure(error.message));
+		yield put(addRollerFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 
@@ -58,12 +58,12 @@ export function* delRoller(action) {
 	try {
 		console.log('running Roller delete axios');
 		console.log(action.payload);
-		const rollerList = yield axios.delete(`/sp/roller/` + action.payload);
+		const rollerList = yield axios.delete(`/sp/rooller/` + action.payload);
 		console.log(rollerList);
 
 		yield put(fetchRollerStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
 	} catch (error) {
-		yield put(delRollerFailure(error.message));
+		yield put(delRollerFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 
@@ -82,7 +82,7 @@ export function* editRoller(action) {
 
 		yield put(fetchRollerStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
 	} catch (error) {
-		yield put(editRollerFailure(error.message));
+		yield put(editRollerFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 

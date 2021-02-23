@@ -28,7 +28,7 @@ export function* fetchLocalspare(action) {
 		console.log(localspareList.data);
 		yield put(fetchLocalspareSuccess(localspareList.data));
 	} catch (error) {
-		yield put(fetchLocalspareFailure(error.message));
+		yield put(fetchLocalspareFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 
@@ -54,7 +54,7 @@ export function* addLocalspare(action) {
 			})
 		);
 	} catch (error) {
-		yield put(addLocalspareFailure(error.message));
+		yield put(addLocalspareFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 
@@ -80,7 +80,7 @@ export function* delLocalspare(action) {
 			})
 		);
 	} catch (error) {
-		yield put(delLocalspareFailure(error.message));
+		yield put(delLocalspareFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 
@@ -108,7 +108,7 @@ export function* editLocalspare(action) {
 			})
 		);
 	} catch (error) {
-		yield put(editLocalspareFailure(error.message));
+		yield put(editLocalspareFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 

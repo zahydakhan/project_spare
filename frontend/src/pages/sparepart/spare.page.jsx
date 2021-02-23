@@ -13,18 +13,16 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { fetchSparepartStart } from '../../redux/spareparts/spareparts.actions';
 import { selectSparepartList } from '../../redux/spareparts/spareparts.selector';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import ToolsIcon from '../../assets/Images/mechanical.png';
 
 import TextField from '@material-ui/core/TextField';
-
-//Icon import
-import BusinessIcon from '@material-ui/icons/Business';
 
 //Modal Import
 import SpareAddModal from './spare_add_modal/SpareAddModal';
 import SpareDeleteModal from './spare_delete_modal/SpareDeleteModal';
 import SpareEditModal from './spare_edit_modal/SpareEditModal';
+
+import {Error} from '../../utils/error.component';
 
 const columns = [
 	{ id: 'part_number', label: 'Part Number', minWidth: 100 },
@@ -96,6 +94,7 @@ export default function StickyHeadTable() {
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const [search, setSearch] = React.useState('');
+	const submitError = useSelector((state) => state.sparepartReducer.errorSparepartMessage);
 
 	useEffect(() => {
 		dispatch(
@@ -128,7 +127,7 @@ export default function StickyHeadTable() {
 		<React.Fragment>
 			<Grid container align='center' style={{ marginBottom: '1em' }}>
 				<Grid item>
-					<BusinessIcon fontSize='large' />
+				<img src={ToolsIcon} alt="roller-logo" style={{width: "3em",}} />
 				</Grid>
 				<Grid item>
 					<Typography variant='h2' style={{ marginLeft: '0.5em' }}>
@@ -156,6 +155,7 @@ export default function StickyHeadTable() {
 					<SpareAddModal />
 				</Grid>
 			</Grid>
+			<Error message={submitError} />
 			<Paper className={classes.root}>
 				<TableContainer className={classes.container}>
 					<Table

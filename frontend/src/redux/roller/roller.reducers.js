@@ -13,7 +13,8 @@ const rollerReducer = (state = INITIAL_STATE, action) => {
         case Roller_types.FETCH_ROLLER_START:
             return {
                 ...state,
-                isRollerFetching: true
+                isRollerFetching: true,
+                errorRollerMessage: ''
             };
         case Roller_types.FETCH_ROLLER_SUCCESS:
             return {

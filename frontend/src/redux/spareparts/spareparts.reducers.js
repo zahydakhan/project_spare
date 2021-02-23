@@ -14,7 +14,8 @@ const sparepartReducer = (state = INITIAL_STATE, action) => {
         case sparepart_types.FETCH_SPAREPART_START:
             return {
                 ...state,
-                isSparepartFetching: true
+                isSparepartFetching: true,
+                errorSparepartMessage: ''
             };
         case sparepart_types.FETCH_SPAREPART_SUCCESS:
             return {

@@ -63,3 +63,17 @@ export const fetchMonthlyOrderFailure = (errorMessage) => ({
     type: mainOrder_types.FETCH_MONTHLY_ORDER_FAILURE,
     payload: errorMessage,
 });
+
+export const fetchFullMainOrderStart = () => ({
+    type: mainOrder_types.FETCH_FULL_MAIN_ORDER_START,
+});
+
+export const fetchFullMainOrderSuccess = (mainOrderList) => ({
+    type: mainOrder_types.FETCH_FULL_MAIN_ORDER_SUCCESS,
+    payload: mainOrderList,
+});
+
+export const fetchFullMainOrderFailure = (errorMessage) => ({
+    type: mainOrder_types.FETCH_FULL_MAIN_ORDER_FAILURE,
+    payload: errorMessage,
+});

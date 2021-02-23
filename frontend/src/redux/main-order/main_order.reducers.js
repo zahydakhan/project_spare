@@ -6,7 +6,10 @@ const INITIAL_STATE = {
     errorMainOrderMessage: '',
     monthlyOrderList: [],
     isMonthlyOrderFetching: false,
-    errorMonthlyOrderMessage: ''
+    errorMonthlyOrderMessage: '',
+    completeOrderList: [],
+    isCompleteOrderFetching:false,
+    errorCompleteOrderMessage: '',
 };
 
 
@@ -84,9 +87,28 @@ const mainOrderReducer = (state = INITIAL_STATE, action) => {
                 isMonthlyOrderFetching: false,
                 errorMonthlyOrderMessage: action.payload
             };
+                //Monthly Order Fetch
+        case mainOrder_types.FETCH_FULL_MAIN_ORDER_START:
+            return {
+                ...state,
+                isCompleteOrderFetching: true
+            };
+        case mainOrder_types.FETCH_FULL_MAIN_ORDER_SUCCESS:
+            return {
+                ...state,
+                isCompleteOrderFetching: false,
+                completeOrderList: action.payload
+            };
+        case mainOrder_types.FETCH_MAIN_ORDER_FAILURE:
+            return {
+                ...state,
+                isCompleteOrderFetching: false,
+                errorCompleteOrderMessage: action.payload
+            };
         default:
             return state;
     }
+
 };
 
 export default mainOrderReducer;

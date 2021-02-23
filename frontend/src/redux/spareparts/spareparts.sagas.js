@@ -42,8 +42,7 @@ export function* addSparepart(action) {
 
         yield put(fetchSparepartStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
     } catch (error) {
-        yield put(addSparepartFailure(error.message));
-        console.log(error.message);
+        yield put(addSparepartFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
     }
 }
 
@@ -61,7 +60,7 @@ export function* delSparepart(action) {
 
         yield put(fetchSparepartStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
     } catch (error) {
-        yield put(delSparepartFailure(error.message));
+        yield put(delSparepartFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
     }
 }
 
@@ -80,7 +79,7 @@ export function* editSparepart(action) {
 
         yield put(fetchSparepartStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
     } catch (error) {
-        yield put(editSparepartFailure(error.message));
+        yield put(editSparepartFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
     }
 }
 
@@ -98,7 +97,7 @@ export function* fetchSparepartFull() {
         console.log(sparepartsListFull.data)
         yield put(fetchSparepartFullSuccess(sparepartsListFull.data));
     } catch (error) {
-        yield put(fetchSparepartFullFailure(error.message));
+        yield put(fetchSparepartFullFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
     }
 }
 

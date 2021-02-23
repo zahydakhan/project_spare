@@ -26,12 +26,14 @@ import { fetchSitesStart } from '../../redux/sites/sites.actions';
 
 //Icon import
 import ContactMailIcon from '@material-ui/icons/ContactMail';
-import BusinessIcon from '@material-ui/icons/Business';
+import Building from '../../assets/Images/building2.png';
 
 //Modal Import
 import SiteAddModal from './site_add_modal/SiteAddModal';
 import SiteDeleteModal from './site_delete_modal/SiteDeleteModal';
 import SiteEditModal from './site_edit_modal/SiteEditModal';
+
+import {Error} from '../../utils/error.component';
 
 const useRowStyles = makeStyles((theme) => ({
 	root: {
@@ -168,10 +170,13 @@ Row.propTypes = {
 
 export default function CollapsibleTable() {
 	const dispatch = useDispatch();
-
+	
 	useEffect(() => {
 		dispatch(fetchSitesStart());
 	}, []);
+
+	const submitError = useSelector((state) => state.siteReducer.errorSiteMessage);
+	//console.log('error response', submitError)
 
 	const SiteList = useSelector((state) => selectSiteList(state));
 	console.log(SiteList);
@@ -179,7 +184,7 @@ export default function CollapsibleTable() {
 		<React.Fragment>
 			<Grid container align='center' style={{ marginBottom: '1em' }}>
 				<Grid item>
-					<BusinessIcon fontSize='large' />
+					<img src={Building} alt="roller-logo" style={{width: "3em",}} />
 				</Grid>
 				<Grid item>
 					<Typography variant='h2' style={{ marginLeft: '0.5em' }}>
@@ -198,6 +203,8 @@ export default function CollapsibleTable() {
 					<SiteAddModal />
 				</Grid>
 			</Grid>
+			
+			<Error message={submitError} />
 
 			<TableContainer component={Paper}>
 				<Table aria-label='collapsible table'>

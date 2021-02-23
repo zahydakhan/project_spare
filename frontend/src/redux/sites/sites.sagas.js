@@ -26,7 +26,7 @@ export function* fetchSites() {
 		console.log(sitesList.data.data);
 		yield put(fetchSitesSuccess(sitesList.data.data));
 	} catch (error) {
-		yield put(fetchSitesFailure(error.message));
+		yield put(fetchSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message ));
 	}
 }
 
@@ -43,7 +43,7 @@ export function* addSites(action) {
 		//yield put(addSitesSuccess(sitesList.data));
 		yield put(fetchSitesStart());
 	} catch (error) {
-		yield put(addSitesFailure(error.message));
+		yield put(addSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 
@@ -61,7 +61,7 @@ export function* delSites(action) {
 
 		yield put(fetchSitesStart());
 	} catch (error) {
-		yield put(delSitesFailure(error.message));
+		yield put(delSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 
@@ -80,7 +80,7 @@ export function* editSites(action) {
 
 		yield put(fetchSitesStart());
 	} catch (error) {
-		yield put(editSitesFailure(error.message));
+		yield put(editSitesFailure(error.response && error.response.data.message ? error.response.data.message : error.message));
 	}
 }
 

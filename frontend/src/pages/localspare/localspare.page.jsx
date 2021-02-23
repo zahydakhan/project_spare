@@ -16,11 +16,10 @@ import { fetchSparepartFullStart } from '../../redux/spareparts/spareparts.actio
 import { selectLocalspareList } from '../../redux/localspare/localspare.selector';
 
 import { useDispatch, useSelector } from 'react-redux';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import TextField from '@material-ui/core/TextField';
 //Icon import
-import BusinessIcon from '@material-ui/icons/Business';
+import ToolsIcon from '../../assets/Images/spareparts.png';
+import {Error} from '../../utils/error.component';
 
 //Modal Import
 import LocalspareAddModal from './localspare_add_modal/LocalSpareAddModal';
@@ -62,6 +61,8 @@ export default function StickyHeadTable() {
 	const dispatch = useDispatch();
 	const [search, setSearch] = React.useState('');
 
+	const submitError = useSelector((state) => state.localspareReducer.errorLocalspareMessage);
+
 	const handleBlur = (event) => {
 		console.log(event.target.value);
 		setSearch(event.target.value);
@@ -94,7 +95,7 @@ export default function StickyHeadTable() {
 		<React.Fragment>
 			<Grid container align='center' style={{ marginBottom: '1em' }}>
 				<Grid item>
-					<BusinessIcon fontSize='large' />
+				<img src={ToolsIcon} alt="roller-logo" style={{width: "3em",}} />
 				</Grid>
 				<Grid item>
 					<Typography variant='h2' style={{ marginLeft: '0.5em' }}>
@@ -122,6 +123,7 @@ export default function StickyHeadTable() {
 					<LocalspareAddModal />
 				</Grid>
 			</Grid>
+			<Error message={submitError} />
 			<Paper className={classes.root}>
 				<TableContainer className={classes.container}>
 					<Table

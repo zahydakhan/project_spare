@@ -27,6 +27,8 @@ import RollerAddModal from './roller_add_modal/RollerAddModal';
 import RollerDeleteModal from './roller_delete_modal/RollerDeleteModal';
 import RollerEditModal from './roller_edit_modal/RollerEditModal';
 
+import {Error} from '../../utils/error.component';
+
 const columns = [
 	{ id: 'vendor_name', label: 'Vendor Name', minWidth: 100 },
 	{ id: 'description', label: 'Description', minWidth: 100 },
@@ -68,6 +70,9 @@ export default function StickyHeadTable() {
 
 	const rollerData = useSelector((state) => selectRollerList(state));
 	console.log(rollerData);
+
+	const submitError = useSelector((state) => state.rollerReducer.errorRollerMessage);
+
 	useEffect(() => {
 		dispatch(
 			fetchRollerStart({
@@ -119,6 +124,7 @@ export default function StickyHeadTable() {
 					<RollerAddModal />
 				</Grid>
 			</Grid>
+			<Error message={submitError} />
 			<Paper className={classes.root}>
 				<TableContainer className={classes.container}>
 					<Table

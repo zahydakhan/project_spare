@@ -16,15 +16,27 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { fetchSparepartGETStart } from '../../../redux/catalogue/catalogue.actions';
 import { selectGETList } from '../../../redux/catalogue/catalogue.selector';
-import SettingsIcon from '../../../assets/Images/settings.png';
+
 import Box from '@material-ui/core/Box';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
+
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PublicIcon from '@material-ui/icons/Public';
 import GroupIcon from '@material-ui/icons/Group';
+
+import SettingsIconPNG from '../../../assets/Images/settings.png';
+import BuildIcon from '@material-ui/icons/Build';
+import LanguageIcon from '@material-ui/icons/Language';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import {
+	Avatar as MuiAvatar,
+	SvgIcon,
+  } from "@material-ui/core";
+
 import ReorderIcon from '@material-ui/icons/Reorder';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 //Alerts imports
@@ -40,12 +52,6 @@ const columns = [
 		label: 'Global Supplier',
 		minWidth: 180,
 		icon: <PublicIcon />,
-	},
-	{
-		id: 'localsupplier',
-		label: 'Local Supplier',
-		minWidth: 180,
-		icon: <GroupIcon />,
 	},
 	{ id: 'actions', label: 'Actions', minWidth: 100, icon: <ReorderIcon /> },
 ];
@@ -76,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
 		fontWeight: 'bolder',
 	},
 	subtitle: {
+		fontSize: 16,
 		color: '#fff',
 		fontWeight: 'bolder',
 	},
@@ -87,6 +94,12 @@ const useStyles = makeStyles((theme) => ({
 		color: '#e63946',
 		fontWeight: 'bolder',
 	},
+	subtitleBlue: {
+		color: theme.palette.primary.main,
+		fontWeight: 'bolder',
+	},
+
+
 	price: {
 		color: '#000',
 		fontWeight: 'bolder',
@@ -97,17 +110,17 @@ const useStyles = makeStyles((theme) => ({
 		marginBottom: '0.5em',
 	},
 	box: {
-		backgroundColor: theme.palette.primary.main,
-		color: '#fff',
-		padding: '0.6em 0.8em',
-	},
-	box1: {
 		backgroundColor: '#4caf50',
 		color: '#fff',
 		padding: '0.6em 0.8em',
 		borderColor: '#4caf50',
 	},
 }));
+
+const Avatar = styled(MuiAvatar)`
+  background: ${(props) => props.theme.palette.primary.main};
+`;
+
 
 export default function StickyHeadTable() {
 	const classes = useStyles();
@@ -199,7 +212,7 @@ export default function StickyHeadTable() {
 		<React.Fragment>
 			<Grid container align='center' style={{ marginBottom: '1em' }}>
 				<Grid item>
-					<img src={SettingsIcon} alt="roller-logo" style={{width: "3em",}} />
+					<img src={SettingsIconPNG} alt="roller-logo" style={{width: "3em",}} />
 				</Grid>
 				<Grid item>
 					<Typography variant='h2' style={{ marginLeft: '0.5em' }}>
@@ -274,7 +287,7 @@ export default function StickyHeadTable() {
 																		style={{ flexWrap: 'nowrap' }}
 																	>
 																		<Grid item>
-																			<PermContactCalendarIcon
+																			<SettingsIcon
 																				fontSize='large'
 																				style={{ marginRight: '0.3em' }}
 																			/>
@@ -282,12 +295,17 @@ export default function StickyHeadTable() {
 																		<Grid item>
 																			<span className={classes.subtitle}>
 																				Part Number:
-																			</span>{' '}
-																			{row.part_number} <br />
+																			</span>
+																			<span style={{fontSize: 16}}>
+																				{row.part_number}
+																			</span>
+																			 <br />
 																			<span className={classes.subtitle}>
 																				Vendor Name:{' '}
 																			</span>
-																			{row.vendor_name} <br />
+																			<span style={{fontSize: 16}}>
+																			{row.vendor_name} 
+																			</span><br />
 																		</Grid>
 																	</Grid>
 																</Box>
@@ -296,10 +314,11 @@ export default function StickyHeadTable() {
 																<Grid
 																	container
 																	direction='row'
+																	spacing={2}
 																	justify='center'
 																>
 																	<Grid item>
-																		<MonetizationOnIcon />
+																		<MonetizationOnIcon fontSize='large' />
 																	</Grid>
 																	<Grid item>
 																		<span className={classes.subtitleRed}>
@@ -308,9 +327,7 @@ export default function StickyHeadTable() {
                             												).toFixed(2)}
 																		</span>{' '}
 																		<br />
-																	</Grid>
-																</Grid>
-																<span className={classes.subtitleGreen}>
+																		<span className={classes.subtitleGreen}>
 																			Saving (AUD):{' '}
 																			{row.comparison_sparepart[0]
 																				? (row.aud ? (row.comparison_sparepart[0].aud - row.aud).toFixed(2) 
@@ -318,10 +335,13 @@ export default function StickyHeadTable() {
 																				: 0}
 
 																		</span>
+																	</Grid>
+																</Grid>
+
 															</Grid>
 														</Grid>
 														<Grid container spacing={1}>
-															<Grid item sm={6}>
+															<Grid item sm={4}>
 																<ListItem
 																	style={{
 																		border: '2px solid #eee',
@@ -329,7 +349,13 @@ export default function StickyHeadTable() {
 																	}}
 																>
 																	<ListItemIcon>
-																		<AssignmentIcon fontSize='large' />
+																	<ListItemAvatar>
+																		<Avatar>
+																		<SvgIcon style={{ fontSize: 25 }}>
+																		<AssignmentIcon />
+																		</SvgIcon>
+																		</Avatar>
+																	</ListItemAvatar>
 																	</ListItemIcon>
 																	<ListItemText
 																		primary='Description'
@@ -344,8 +370,18 @@ export default function StickyHeadTable() {
 																	/>
 																</ListItem>
 															</Grid>
-															<Grid item sm={6}>
+															<Grid item sm={4}>
 																<ListItem style={{ border: '2px solid #eee' }}>
+																<ListItemIcon>
+																<ListItemAvatar>
+																		<Avatar>
+																		<SvgIcon style={{ fontSize: 25 }}>
+																		<BuildIcon />
+																		</SvgIcon>
+																		</Avatar>
+																	</ListItemAvatar>
+
+																	</ListItemIcon>
 																	<ListItemText>
 																		<Typography component='span'>
 																			<span className={classes.subtitleBlack}>
@@ -366,67 +402,7 @@ export default function StickyHeadTable() {
 																	</ListItemText>
 																</ListItem>
 															</Grid>
-														</Grid>
-													</CardContent>
-												</Card>
-											</TableCell>
-											<TableCell>
-												<Card className={classes.root}>
-													<CardContent>
-														<Grid container spacing={2}>
-															<Grid item sm={8}>
-																<Box
-																	borderRadius={5}
-																	{...defaultProps}
-																	className={classes.box1}
-																>
-																	<Grid
-																		container
-																		direction='row'
-																		style={{ flexWrap: 'nowrap' }}
-																	>
-																		<Grid item>
-																			<PermContactCalendarIcon
-																				fontSize='large'
-																				style={{ marginRight: '0.3em' }}
-																			/>
-																		</Grid>
-																		<Grid item>
-																			<span className={classes.subtitle}>
-																				Part Number:
-																			</span>{' '}
-																			{row.part_number} <br />
-																			<span className={classes.subtitle}>
-																				Vendor Name:{' '}
-																			</span>
-																			{row.comparison_sparepart[0]
-																				? row.comparison_sparepart[0]
-																						.vendor_name
-																				: ''}{' '}
-																			<br />
-																		</Grid>
-																	</Grid>
-																</Box>
-															</Grid>
 															<Grid item sm={4}>
-																<Grid container align='center'>
-																	<Grid item>
-																		<MonetizationOnIcon />
-																	</Grid>
-																	<Grid>
-																		<span className={classes.subtitleRed}>
-																			(AUD):{' '}
-																			{row.comparison_sparepart[0]
-																				? (row.comparison_sparepart[0].aud ? row.comparison_sparepart[0].aud : (parseFloat(row.comparison_sparepart[0].usd) * parseFloat(audToUsd)).toFixed(2))
-																				: ''}
-																		</span>{' '}
-																		<br />
-																	</Grid>
-																</Grid>
-															</Grid>
-														</Grid>
-														<Grid container spacing={1}>
-															<Grid item sm={6}>
 																<ListItem
 																	style={{
 																		border: '2px solid #eee',
@@ -434,59 +410,37 @@ export default function StickyHeadTable() {
 																	}}
 																>
 																	<ListItemIcon>
-																		<AssignmentIcon fontSize='large' />
+																	<ListItemAvatar>
+																		<Avatar>
+																		<SvgIcon style={{ fontSize: 25 }} >
+																		<LanguageIcon />
+																		</SvgIcon>
+																		</Avatar>
+																	</ListItemAvatar>
+	  
 																	</ListItemIcon>
-																	<ListItemText
-																		primary='Description'
-																		secondary={
-																			<React.Fragment>
-																				<Typography
-																					component='span'
-																					color='textSecondary'
-																				>
-																					{row.comparison_sparepart[0]
-																						? row.comparison_sparepart[0]
-																								.description
-																						: ''}
-																				</Typography>
-																			</React.Fragment>
-																		}
-																	/>
-																</ListItem>
-															</Grid>
-															<Grid item sm={6}>
-																<ListItem style={{ border: '2px solid #eee' }}>
 																	<ListItemText>
-																		<Typography component='span'>
-																			<span className={classes.subtitleBlack}>
-																				Weight (kg):{' '}
-																			</span>
-																			{row.comparison_sparepart[0]
-																				? row.comparison_sparepart[0].weight_kg
-																				: ''}{' '}
-																			<br />
-																			<span className={classes.subtitleBlack}>
-																				Machine:{' '}
-																			</span>
-																			{row.comparison_sparepart[0]
-																				? row.comparison_sparepart[0].machine
-																				: ''}{' '}
-																			<br />
-																			<span className={classes.subtitleBlack}>
-																				Model No.:{' '}
-																			</span>
-																			{row.comparison_sparepart[0]
+																		<Typography>
+																		 <span className={classes.subtitleBlack} >Local Supplier Information </span> <br />
+																				<span className={classes.subtitleBlack}>Vendor Name:</span> 
+																				{row.comparison_sparepart[0]
 																				? row.comparison_sparepart[0]
-																						.model_number
+																						.vendor_name
+																				: ''} <br />
+																				<span className={classes.subtitleBlack}>Price:</span> 
+																				{row.comparison_sparepart[0]
+																				? (row.comparison_sparepart[0].aud ? row.comparison_sparepart[0].aud : (parseFloat(row.comparison_sparepart[0].usd) * parseFloat(audToUsd)).toFixed(2))
 																				: ''}
 																		</Typography>
 																	</ListItemText>
 																</ListItem>
 															</Grid>
+														
 														</Grid>
 													</CardContent>
 												</Card>
 											</TableCell>
+											
 
 											<TableCell>
 												<Card className={classes.formcard}>

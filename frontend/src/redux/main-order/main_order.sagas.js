@@ -14,20 +14,44 @@ import {
     editMainOrderStart,
     editMainOrderFailure,
     fetchMonthlyOrderSuccess,
-    fetchMonthlyOrderFailure
+    fetchMonthlyOrderFailure,
+    fetchFullMainOrderSuccess,
+    fetchFullMainOrderFailure,
+    fetchFullMainOrderStart
 
 } from './main_order.actions';
 
+import {fetchSiteOrderStart} from '../site-orders/site_order.actions'
+
+
+    //Fetch Complete Order Saga
+    export function* fetchCompleteOrder() {
+        console.log('running complete Order list Fetch Start saga');
+        
+        try {
+            const completeOrdersList = yield axios.get(
+                `/pr/main_pr/`);
+            console.log('this is the response of comeplet order list saga', completeOrdersList.data.data);
+            yield put(fetchFullMainOrderSuccess(completeOrdersList.data.data));
+        } catch (error) {
+            yield put(fetchFullMainOrderFailure(error.message));
+        }
+    }
+    
+    export function* onFetchCompleteOrderStart() {
+            yield takeLatest(mainOrder_types.FETCH_FULL_MAIN_ORDER_START, fetchCompleteOrder);
+        }
+
 //Fetch Site Order Saga
 export function* fetchMainOrder(action) {
-    let vendor_name = action.payload.vendor_name
-    let site = action.payload.site
-    let month = action.payload.month
-    console.log('running Site Order Fetch Start saga');
+    let vendor_name = (action.payload.vendor_name).toString()
+    let site = (action.payload.site).toString()
+    let month = (action.payload.month).toString()
+    console.log('running Site Order Fetch Start saga', vendor_name, month, site);
     
     try {
         const mainOrdersList = yield axios.get(
-            `/pr/mainorderfilter/?vendor_name={$vendor_name}&site={$site}&month={$month}`);
+            `/pr/mainorderfilter/?vendor_name=${vendor_name}&site=${site}&month=${month}`);
         console.log(mainOrdersList);
         yield put(fetchMainOrderSuccess(mainOrdersList.data));
     } catch (error) {
@@ -47,7 +71,7 @@ export function* addMainOrder(action) {
         console.log(mainOrderList);
 
         //yield put(addRollerSuccess(sitesList.data));
-        yield put(fetchMainOrderStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
+        yield put(fetchSiteOrderStart({ pageNo: 0, rowsPerPage: 10, searchstr: '' }));
     } catch (error) {
         yield put(addMainOrderFailure(error.message));
     }
@@ -115,3 +139,6 @@ export function* fetchMonthlyOrder(action) {
 export function* onFetchMonthlyOrderStart() {
         yield takeLatest(mainOrder_types.FETCH_MONTHLY_ORDER_START, fetchMonthlyOrder);
     }
+
+
+

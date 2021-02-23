@@ -53,16 +53,17 @@ const CustomTableRow = styled(TableRow)`
 `;
 
 function CustomizedTableDemo({ order_data, site_data }) {
-  console.log(order_data, site_data);
+  console.log("order data in table component",order_data);
+  console.log("site data in table component",site_data);
 
   return (
     <Card mb={6}>
       <CardContent pb={1}>
         <Typography variant='h6' gutterBottom>
-          Site Name : {site_data.length ? site_data[0].site : ""}
+          Site Name : {site_data && site_data.site}
         </Typography>
         <Typography variant='h6' gutterBottom>
-          Site Adress : {site_data.length ? site_data[0].address : ""}
+          Site Adress : {site_data && site_data.address}
         </Typography>
 
         <Grid container direction='row'>
@@ -71,13 +72,13 @@ function CustomizedTableDemo({ order_data, site_data }) {
               <CardContent>
                 <Typography gutterBottom variant='h5' component='h2'>
                   Manager Name :{" "}
-                  {site_data.length ? site_data[0].manager_name : ""}
+                  {site_data && site_data.manager_name}
                 </Typography>
                 Manager Email :{" "}
-                {site_data.length ? site_data[0].manager_email : ""}
+                {site_data && site_data.manager_email }
                 <Typography mb={4} component='p'>
                   Manager Phone :{" "}
-                  {site_data.length ? site_data[0].manager_phone : ""}
+                  {site_data && site_data.manager_phone}
                 </Typography>
               </CardContent>
             </Card>
@@ -88,13 +89,13 @@ function CustomizedTableDemo({ order_data, site_data }) {
               <CardContent>
                 <Typography gutterBottom variant='h5' component='h2'>
                   Supervisor Name :{" "}
-                  {site_data.length ? site_data[0].supervisor_name : ""}
+                  {site_data && site_data.supervisor_name }
                 </Typography>
                 Supervisor Email :{" "}
-                {site_data.length ? site_data[0].supervisor_email : ""}
+                { site_data && site_data.supervisor_email }
                 <Typography mb={4} component='p'>
                   Supervisor Phone :{" "}
-                  {site_data.length ? site_data[0].supervisor_phone : ""}
+                  {site_data && site_data.supervisor_phone }
                 </Typography>
               </CardContent>
             </Card>
